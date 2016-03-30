@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A10C4A91-AAC7-4ADB-9DF7-A33DABC57FEC}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FinalSpeed</RootNamespace>
+    <AssemblyName>FinalSpeed</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="rudp\AckListManage.cs" />
+    <Compile Include="rudp\AckListTask.cs" />
+    <Compile Include="rudp\ClientControl.cs" />
+    <Compile Include="rudp\ConnectException.cs" />
+    <Compile Include="rudp\ConnectionUDP.cs" />
+    <Compile Include="rudp\message\AckListMessage.cs" />
+    <Compile Include="rudp\message\CloseMessage_Conn.cs" />
+    <Compile Include="rudp\message\CloseMessage_Stream.cs" />
+    <Compile Include="rudp\message\DataMessage.cs" />
+    <Compile Include="rudp\message\Message.cs" />
+    <Compile Include="rudp\message\MessageType.cs" />
+    <Compile Include="rudp\message\PingMessage.cs" />
+    <Compile Include="rudp\message\PingMessage2.cs" />
+    <Compile Include="rudp\Receiver.cs" />
+    <Compile Include="rudp\ResendItem.cs" />
+    <Compile Include="rudp\ResendManage.cs" />
+    <Compile Include="rudp\Route.cs" />
+    <Compile Include="rudp\RUDPConfig.cs" />
+    <Compile Include="rudp\Sender.cs" />
+    <Compile Include="rudp\SendRecord.cs" />
+    <Compile Include="rudp\UDPInputStream.cs" />
+    <Compile Include="rudp\UDPOutputStream.cs" />
+    <Compile Include="socket\DatagramPacket.cs" />
+    <Compile Include="utils\ByteIntConvert.cs" />
+    <Compile Include="utils\ByteShortConvert.cs" />
+    <Compile Include="utils\MessageCheck.cs" />
+    <Compile Include="utils\MLog.cs" />
+    <Compile Include="utils\NetStatus.cs" />
+    <Compile Include="utils\SpeedUnit.cs" />
+    <Compile Include="utils\Tools.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
