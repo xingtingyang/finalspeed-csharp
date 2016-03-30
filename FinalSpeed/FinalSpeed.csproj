@@ -47,7 +47,9 @@
     <Compile Include="rudp\AckListTask.cs" />
     <Compile Include="rudp\ClientControl.cs" />
     <Compile Include="rudp\ClientManager.cs" />
+    <Compile Include="rudp\ClientProcessorInterface.cs" />
     <Compile Include="rudp\ConnectException.cs" />
+    <Compile Include="rudp\ConnectionProcessor.cs" />
     <Compile Include="rudp\ConnectionUDP.cs" />
     <Compile Include="rudp\message\AckListMessage.cs" />
     <Compile Include="rudp\message\CloseMessage_Conn.cs" />

@@ -26,7 +26,7 @@ namespace FinalSpeed.rudp
 
         }
 
-        float getDropRate()
+        public float getDropRate()
         {
             int droped = getSendSize() - getAckedSize();
             if (droped < 0)
@@ -41,7 +41,7 @@ namespace FinalSpeed.rudp
             return dropRate;
         }
 
-        float getResendRate()
+        public float getResendRate()
         {
             float resendRate = 0;
             if (getSendSize_First() > 0)
@@ -51,18 +51,18 @@ namespace FinalSpeed.rudp
             return resendRate;
         }
 
-        void addResended(int size)
+        public void addResended(int size)
         {
             resended += size;
         }
 
-        void addSended(int size)
+        public void addSended(int size)
         {
             sendCount++;
             sendSize += size;
         }
 
-        void addSended_First(int size)
+        public void addSended_First(int size)
         {
             sendSize_First += size;
         }

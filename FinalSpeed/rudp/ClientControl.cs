@@ -183,23 +183,24 @@ namespace FinalSpeed.rudp
 
         public void close()
         {
-            //closed=true;
-            //route.clientManager.removeClient(clientId);
-            //lock (syn_connTable) {
-            //    Iterator<Integer> it=getConnTableIterator();
-            //    while(it.hasNext()){
-            //        final ConnectionUDP conn=connTable.get(it.next());
-            //        if(conn!=null){
-            //            Route.es.execute(()=>{
+            closed = true;
+            route.clientManager.removeClient(clientId);
+            lock (syn_connTable)
+            {
+                //Iterator<Integer> it=getConnTableIterator();//不用迭代器，用foreach
+                foreach (ConnectionUDP conn in connTable.Values)
+                {
+                    if (conn != null)
+                    {
+                        Route.es.execute(() =>
+                        {
+                            conn.stopnow = true;
+                            conn.destroy(true);
 
-            //                    conn.stopnow=true;
-            //                    conn.destroy(true);
-
-            //            });
-
-            //        }
-            //    }
-            //}
+                        });
+                    }
+                }
+            }
         }
 
         //Iterator<Integer> getConnTableIterator()
@@ -235,7 +236,7 @@ namespace FinalSpeed.rudp
             }
         }
 
-        SendRecord getSendRecord(int timeId)
+        public SendRecord getSendRecord(int timeId)
         {
             SendRecord record = null;
             lock (syn_timeid)

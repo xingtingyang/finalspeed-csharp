@@ -19,7 +19,7 @@ namespace FinalSpeed.rudp
 
         ConnectionUDP conn;
 
-        UDPInputStream(ConnectionUDP conn)
+        public UDPInputStream(ConnectionUDP conn)
         {
             this.conn = conn;
             receiver = conn.receiver;

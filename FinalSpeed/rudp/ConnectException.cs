@@ -15,11 +15,5 @@ namespace FinalSpeed.rudp
         {
             this.Message = message;
         }
-
-        public ConnectException(string p)
-        {
-            // TODO: Complete member initialization
-            this.p = p;
-        }
     }
 }
