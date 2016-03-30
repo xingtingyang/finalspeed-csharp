@@ -16,16 +16,16 @@ namespace FinalSpeed.rudp
         public Receiver receiver;
         public UDPOutputStream uos;
         public UDPInputStream uis;
-        long connetionId;
-        Route route;
-        int mode;
-        private boolean connected = true;
+        public long connetionId;
+        public Route route;
+        public int mode;
+        private bool connected = true;
         long lastLiveTime = DateTime.Now.Millisecond;
         long lastSendLiveTime = 0;
 
         static Random ran = new Random();
 
-        int connectId;
+        public int connectId;
 
         ConnectionProcessor connectionProcessor;
 
@@ -33,11 +33,11 @@ namespace FinalSpeed.rudp
 
         public ClientControl clientControl;
 
-        public boolean localClosed = false, remoteClosed = false, destroied = false;
+        public bool localClosed = false, remoteClosed = false, destroied = false;
 
-        public boolean stopnow = false;
+        public bool stopnow = false;
 
-        public ConnectionUDP(Route ro, InetAddress dstIp, int dstPort, int mode, int connectId, ClientControl clientControl)
+        public ConnectionUDP(Route ro, IPAddress dstIp, int dstPort, int mode, int connectId, ClientControl clientControl)
         {
             this.clientControl = clientControl;
             this.route = ro;
@@ -124,7 +124,7 @@ namespace FinalSpeed.rudp
         }
 
         //完全关闭
-        public void destroy(boolean force)
+        public void destroy(bool force)
         {
             if (!destroied)
             {
@@ -149,7 +149,7 @@ namespace FinalSpeed.rudp
 
         void live()
         {
-            lastLiveTime = System.currentTimeMillis();
+            lastLiveTime = DateTime.Now.Millisecond;
         }
     }
 }

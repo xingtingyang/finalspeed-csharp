@@ -240,7 +240,7 @@ namespace FinalSpeed.rudp
             }
         }
 
-        bool checkWin()
+        public bool checkWin()
         {
             nw = conn.sender.sendOffset - lastRead2;
             bool b = false;
@@ -282,7 +282,7 @@ namespace FinalSpeed.rudp
             }
         }
 
-        void closeStream_Local()
+        public void closeStream_Local()
         {
             if (!streamClose)
             {

@@ -21,6 +21,7 @@ namespace FinalSpeed
         static void change(string s)
         {
             s += "abc";
+            
         }
     }
 }

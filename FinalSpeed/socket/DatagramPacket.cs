@@ -7,6 +7,10 @@ using System.Net.Sockets;
 
 namespace FinalSpeed.socket
 {
+    /// <summary>
+    /// <para>这是为了兼容原JAVA代码里的DatagramPacket才创建的类</para>
+    /// <para>理论上可以不需要这个类的，后期我再改的更好一点吧</para>
+    /// </summary>
     public class DatagramPacket
     {
         public byte[] buf { get; set; }
