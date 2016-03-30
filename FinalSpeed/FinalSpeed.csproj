@@ -50,6 +50,7 @@
     <Compile Include="cap\CapEnv.cs" />
     <Compile Include="cap\CapServer.cs" />
     <Compile Include="cap\IPacket.cs" />
+    <Compile Include="cap\PacketUtils.cs" />
     <Compile Include="cap\SendRecord.cs" />
     <Compile Include="cap\TCPTun.cs" />
     <Compile Include="cap\TunData.cs" />
