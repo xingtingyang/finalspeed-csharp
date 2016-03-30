@@ -32,6 +32,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PacketDotNet">
+      <HintPath>..\..\..\..\..\..\Tools\SharpPcap-4.2.0\Debug\PacketDotNet.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpPcap">
+      <HintPath>..\..\..\..\..\..\Tools\SharpPcap-4.2.0\Debug\SharpPcap.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,6 +47,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="cap\CapEnv.cs" />
+    <Compile Include="cap\CapServer.cs" />
+    <Compile Include="cap\IPacket.cs" />
+    <Compile Include="cap\SendRecord.cs" />
     <Compile Include="cap\TCPTun.cs" />
     <Compile Include="cap\TunData.cs" />
     <Compile Include="Program.cs" />
