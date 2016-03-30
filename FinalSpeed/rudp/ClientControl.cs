@@ -12,56 +12,56 @@ namespace FinalSpeed.rudp
 {
     class ClientControl
     {
-      public  int clientId;
+        public int clientId;
 
 
-      public  Thread sendThread;
+        public Thread sendThread;
 
-     public   Object synlock = new Object();
+        public Object synlock = new Object();
 
         private Dictionary<int, SendRecord> sendRecordTable = new Dictionary<int, SendRecord>();
 
 
-     public   Dictionary<int, SendRecord> sendRecordTable_remote = new Dictionary<int, SendRecord>();
+        public Dictionary<int, SendRecord> sendRecordTable_remote = new Dictionary<int, SendRecord>();
 
 
-     public   long startSendTime = 0;
+        public long startSendTime = 0;
 
-    public    const int maxSpeed = (int)(1024 * 1024);
+        public const int maxSpeed = (int)(1024 * 1024);
 
-      public  const int initSpeed = (int)maxSpeed;
+        public const int initSpeed = (int)maxSpeed;
 
-      public  int currentSpeed = initSpeed;
+        public int currentSpeed = initSpeed;
 
-     public   int lastTime = -1;
+        public int lastTime = -1;
 
-    public    Object syn_timeid = new Object();
+        public Object syn_timeid = new Object();
 
-    public    long sended = 0;
+        public long sended = 0;
 
-  public      long markTime = 0;
+        public long markTime = 0;
 
-   public     long lastSendPingTime, lastReceivePingTime = DateTime.Now.Millisecond;
+        public long lastSendPingTime, lastReceivePingTime = DateTime.Now.Millisecond;
 
-    public    Random ran = new Random();
+        public Random ran = new Random();
 
-    public    Dictionary<int, long> pingTable = new Dictionary<int, long>();
+        public Dictionary<int, long> pingTable = new Dictionary<int, long>();
 
         public int pingDelay = 250;
 
-   public     int clientId_real = -1;
+        public int clientId_real = -1;
 
-     public   long needSleep_All, trueSleep_All;
+        public long needSleep_All, trueSleep_All;
 
-     public   int maxAcked = 0;
+        public int maxAcked = 0;
 
-     public   long lastLockTime;
+        public long lastLockTime;
 
-    public    Route route;
+        public Route route;
 
-     public   IPAddress dstIp;
+        public IPAddress dstIp;
 
-    public    int dstPort;
+        public int dstPort;
 
         public Dictionary<int, ConnectionUDP> connTable = new Dictionary<int, ConnectionUDP>();
 
@@ -183,34 +183,34 @@ namespace FinalSpeed.rudp
 
         public void close()
         {
-            closed=true;
-            route.clientManager.removeClient(clientId);
-            lock (syn_connTable) {
-                Iterator<Integer> it=getConnTableIterator();
-                while(it.hasNext()){
-                    final ConnectionUDP conn=connTable.get(it.next());
-                    if(conn!=null){
-                        Route.es.execute(new Runnable() {
-                            public void run() {
-                                conn.stopnow=true;
-                                conn.destroy(true);
-                            }
-                        });
+            //closed=true;
+            //route.clientManager.removeClient(clientId);
+            //lock (syn_connTable) {
+            //    Iterator<Integer> it=getConnTableIterator();
+            //    while(it.hasNext()){
+            //        final ConnectionUDP conn=connTable.get(it.next());
+            //        if(conn!=null){
+            //            Route.es.execute(()=>{
 
-                    }
-                }
-            }
+            //                    conn.stopnow=true;
+            //                    conn.destroy(true);
+
+            //            });
+
+            //        }
+            //    }
+            //}
         }
 
-        Iterator<Integer> getConnTableIterator()
-        {
-            Iterator<Integer> it = null;
-            lock (syn_connTable)
-            {
-                it = new CopiedIterator(connTable.keySet().iterator());
-            }
-            return it;
-        }
+        //Iterator<Integer> getConnTableIterator()
+        //{
+        //    Iterator<Integer> it = null;
+        //    lock (syn_connTable)
+        //    {
+        //        it = new CopiedIterator(connTable.keySet().iterator());
+        //    }
+        //    return it;
+        //}
 
         public void updateClientId(int newClientId)
         {
