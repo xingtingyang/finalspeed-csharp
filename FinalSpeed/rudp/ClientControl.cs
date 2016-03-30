@@ -12,56 +12,56 @@ namespace FinalSpeed.rudp
 {
     class ClientControl
     {
-        int clientId;
+      public  int clientId;
 
 
-        Thread sendThread;
+      public  Thread sendThread;
 
-        Object synlock = new Object();
+     public   Object synlock = new Object();
 
         private Dictionary<int, SendRecord> sendRecordTable = new Dictionary<int, SendRecord>();
 
 
-        Dictionary<int, SendRecord> sendRecordTable_remote = new Dictionary<int, SendRecord>();
+     public   Dictionary<int, SendRecord> sendRecordTable_remote = new Dictionary<int, SendRecord>();
 
 
-        long startSendTime = 0;
+     public   long startSendTime = 0;
 
-        const int maxSpeed = (int)(1024 * 1024);
+    public    const int maxSpeed = (int)(1024 * 1024);
 
-        const int initSpeed = (int)maxSpeed;
+      public  const int initSpeed = (int)maxSpeed;
 
-        int currentSpeed = initSpeed;
+      public  int currentSpeed = initSpeed;
 
-        int lastTime = -1;
+     public   int lastTime = -1;
 
-        Object syn_timeid = new Object();
+    public    Object syn_timeid = new Object();
 
-        long sended = 0;
+    public    long sended = 0;
 
-        long markTime = 0;
+  public      long markTime = 0;
 
-        long lastSendPingTime, lastReceivePingTime = DateTime.Now.Millisecond;
+   public     long lastSendPingTime, lastReceivePingTime = DateTime.Now.Millisecond;
 
-        Random ran = new Random();
+    public    Random ran = new Random();
 
-        Dictionary<int, long> pingTable = new Dictionary<int, long>();
+    public    Dictionary<int, long> pingTable = new Dictionary<int, long>();
 
         public int pingDelay = 250;
 
-        int clientId_real = -1;
+   public     int clientId_real = -1;
 
-        long needSleep_All, trueSleep_All;
+     public   long needSleep_All, trueSleep_All;
 
-        int maxAcked = 0;
+     public   int maxAcked = 0;
 
-        long lastLockTime;
+     public   long lastLockTime;
 
-        Route route;
+    public    Route route;
 
-        IPAddress dstIp;
+     public   IPAddress dstIp;
 
-        int dstPort;
+    public    int dstPort;
 
         public Dictionary<int, ConnectionUDP> connTable = new Dictionary<int, ConnectionUDP>();
 
