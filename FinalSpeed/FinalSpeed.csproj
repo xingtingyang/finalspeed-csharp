@@ -40,6 +40,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -55,6 +56,7 @@
     <Compile Include="cap\TCPTun.cs" />
     <Compile Include="cap\TunData.cs" />
     <Compile Include="client\ClientUII.cs" />
+    <Compile Include="client\JSON.cs" />
     <Compile Include="client\MapClient.cs" />
     <Compile Include="client\MapRule.cs" />
     <Compile Include="client\PortMapManager.cs" />
