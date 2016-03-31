@@ -54,6 +54,10 @@
     <Compile Include="cap\SendRecord.cs" />
     <Compile Include="cap\TCPTun.cs" />
     <Compile Include="cap\TunData.cs" />
+    <Compile Include="client\ClientUII.cs" />
+    <Compile Include="client\MapClient.cs" />
+    <Compile Include="client\MapRule.cs" />
+    <Compile Include="client\PortMapManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="rudp\AckListManage.cs" />
