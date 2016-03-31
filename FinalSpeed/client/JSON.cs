@@ -37,12 +37,12 @@ namespace FinalSpeed.client
     /// 辅助生成port_map.json的类
     /// </summary>
     [DataContract]
-    public class MapListFile
+    public class MapList
     {
         [DataMember(Order = 0, IsRequired = true)]
         public List<MapPair> map_list { get; set; }
 
-        public MapListFile()
+        public MapList()
         {
             map_list = new List<MapPair>();
         }
