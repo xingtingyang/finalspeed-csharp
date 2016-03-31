@@ -10,7 +10,7 @@ namespace FinalSpeed
     {
         static void Main(string[] args)
         {
-            string str = "one two three";
+            string str = "one two three five";
             change(str);
 
             Console.WriteLine(str);
