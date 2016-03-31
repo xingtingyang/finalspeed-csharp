@@ -63,4 +63,29 @@ namespace FinalSpeed.client
         [DataMember(Order = 2, IsRequired = true)]
         public string name { get; set; }
     }
+
+    [DataContract]
+    public class Client_Config
+    {
+        [DataMember(Order = 0)]
+        public bool auto_start;
+
+        [DataMember(Order = 1, IsRequired = true)]
+        public int download_speed;
+
+        [DataMember(Order = 2)]
+        public string protocal;
+
+        [DataMember(Order = 3, IsRequired = true)]
+        public string server_address;
+
+        [DataMember(Order = 4)]
+        public int server_port;
+
+        [DataMember(Order = 5)]
+        public int socks5_port;
+
+        [DataMember(Order = 6, IsRequired = true)]
+        public int upload_speed;
+    }
 }
