@@ -78,6 +78,7 @@
     <Compile Include="rudp\message\MessageType.cs" />
     <Compile Include="rudp\message\PingMessage.cs" />
     <Compile Include="rudp\message\PingMessage2.cs" />
+    <Compile Include="rudp\PortMapProcess.cs" />
     <Compile Include="rudp\Receiver.cs" />
     <Compile Include="rudp\ResendItem.cs" />
     <Compile Include="rudp\ResendManage.cs" />

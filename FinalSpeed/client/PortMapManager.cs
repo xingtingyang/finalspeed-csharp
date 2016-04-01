@@ -6,6 +6,8 @@ using System.Net;
 using System.Net.Sockets;
 using FinalSpeed.utils;
 using System.Runtime.Serialization;
+using System.IO;
+using FinalSpeed.rudp;
 
 namespace FinalSpeed.client
 {
@@ -233,9 +235,9 @@ namespace FinalSpeed.client
                         listen(serverSocket);
                         mapRule.serverSocket = serverSocket;
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
-                        mapRule.isUsing=true;
+                        mapRule.isUsing = true;
                         MLog.info(e.Message);
                     }
                     mapRuleTable.Add(mapRule.listen_port, mapRule);
@@ -270,49 +272,50 @@ namespace FinalSpeed.client
 
         void listen(Socket serverSocket)
         {
-            //Route.es.execute(new Runnable() {
+            Route.es.execute(() =>
+            {
+                while (true)
+                {
+                    try
+                    {
+                        Socket socket = serverSocket.Accept();
+                        Route.es.execute(() =>
+                        {
+                            int listenPort = (serverSocket.LocalEndPoint as IPEndPoint).Port;
+                            MapRule mapRule = mapRuleTable[listenPort];
+                            if (mapRule != null)
+                            {
+                                Route route = null;
+                                if (mapClient.isUseTcp())
+                                {
+                                    route = mapClient.route_tcp;
+                                }
+                                else
+                                {
+                                    route = mapClient.route_udp;
+                                }
+                                PortMapProcess process = new PortMapProcess(mapClient, route, socket, mapClient.serverAddress, mapClient.serverPort, null,
+                                        null, mapRule.dst_port);
+                            }
+                        });
 
-            //    @Override
-            //    public void run() {
-            //        while(true){
-            //            try {
-            //                final Socket socket=serverSocket.accept();
-            //                Route.es.execute(new Runnable() {
-
-            //                    @Override
-            //                    public void run() {
-            //                        int listenPort=serverSocket.getLocalPort();
-            //                        MapRule mapRule=mapRuleTable.get(listenPort);
-            //                        if(mapRule!=null){
-            //                            Route route=null;
-            //                            if(mapClient.isUseTcp()){
-            //                                route=mapClient.route_tcp;
-            //                            }else {
-            //                                route=mapClient.route_udp;
-            //                            }
-            //                            PortMapProcess process=new PortMapProcess(mapClient,route, socket,mapClient.serverAddress,mapClient.serverPort,null, 
-            //                                    null,mapRule.dst_port);
-            //                        }
-            //                    }
-
-            //                });
-
-            //            } catch (IOException e) {
-            //                e.printStackTrace();
-            //                break;
-            //            }
-            //        }
-            //    }
-            //});
+                    }
+                    catch (Exception e)
+                    {
+                        MLog.info(e.Message);
+                        break;
+                    }
+                }
+            });
         }
 
         void saveFile(byte[] data, string path)
         {
-            FileOutputStream fos = null;
+            FileStream fos = null;
             try
             {
-                fos = new FileOutputStream(path);
-                fos.write(data);
+                fos = new FileStream(path, FileMode.Create);
+                fos.Write(data, 0, data.Length);
             }
             catch (Exception e)
             {
@@ -322,58 +325,30 @@ namespace FinalSpeed.client
             {
                 if (fos != null)
                 {
-                    fos.close();
+                    fos.Close();
                 }
             }
         }
 
-        public static string readFileUtf8(String path)
+        public static string readFileUtf8(string path)
         {
-            String str = null;
-            FileInputStream fis = null;
-            DataInputStream dis = null;
+            string str = null;
+            FileStream file = null;
             try
             {
-                File file = new File(path);
+                file = new FileStream(path, FileMode.Open);
 
-                int length = (int)file.length();
-                byte[] data = new byte[length];
-
-                fis = new FileInputStream(file);
-                dis = new DataInputStream(fis);
-                dis.readFully(data);
-                str = new String(data, "utf-8");
-
+                byte[] data = new byte[file.Length];
+                file.Read(data, 0, data.Length);
+                str = Encoding.UTF8.GetString(data);
             }
             catch (Exception e)
             {
-                //e.printStackTrace();
                 throw e;
             }
             finally
             {
-                if (fis != null)
-                {
-                    try
-                    {
-                        fis.close();
-                    }
-                    catch (IOException e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
-                if (dis != null)
-                {
-                    try
-                    {
-                        dis.close();
-                    }
-                    catch (IOException e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
+                file.Close();
             }
 
             return str;

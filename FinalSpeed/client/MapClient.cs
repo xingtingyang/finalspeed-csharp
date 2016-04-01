@@ -13,17 +13,17 @@ namespace FinalSpeed.client
     {
         	ConnectionProcessor imTunnelProcessor;
 
-	Route route_udp,route_tcp;
+	public Route route_udp,route_tcp;
 
-	short routePort=45;
+	public short routePort=45;
 
-	ClientUII ui;
+	public ClientUII ui;
 
-	String serverAddress="";
+	public string serverAddress="";
 
-	IPAddress address=null;
+	public IPAddress address=null;
 
-	int serverPort=130;
+	public int serverPort=130;
 
 	NetStatus netStatus;
 
@@ -51,64 +51,64 @@ namespace FinalSpeed.client
 	
 	static int monPort=25874;
 	
-	String systemName=System.getProperty("os.name").toLowerCase();
+	string systemName=System.getProperty("os.name").toLowerCase();
 	
-	boolean useTcp=true;
+	bool useTcp=true;
 	
 	long clientId;
 
 	Random ran=new Random();
 
-	MapClient(ClientUI ui) throws Exception {
-		this.ui=ui;
-		mapClient=this;
-		try {
-			final ServerSocket socket=new ServerSocket(monPort);
-			new Thread(){
-				public void run(){
-					try {
-						socket.accept();
-					} catch (IOException e) {
-						e.printStackTrace();
-						System.exit(0);
-					}
-				}
-			}.start();
-		} catch (Exception e) {
-			//e.printStackTrace();
-			//System.exit(0);
-		}
-		try {
-			route_tcp = new Route(null,routePort,Route.mode_client,true);
-		} catch (Exception e1) {
-			//e1.printStackTrace();
-			throw e1;
-		}
-		try {
-			route_udp = new Route(null,routePort,Route.mode_client,false);
-		} catch (Exception e1) {
-			//e1.printStackTrace();
-			throw e1;
-		}
-		netStatus=new NetStatus();
+	public MapClient(ClientUI ui){
+        //this.ui=ui;
+        //mapClient=this;
+        //try {
+        //     ServerSocket socket=new ServerSocket(monPort);
+        //    new Thread(){
+        //        public void run(){
+        //            try {
+        //                socket.accept();
+        //            } catch (IOException e) {
+        //                e.printStackTrace();
+        //                System.exit(0);
+        //            }
+        //        }
+        //    }.start();
+        //} catch (Exception e) {
+        //    //e.printStackTrace();
+        //    //System.exit(0);
+        //}
+        //try {
+        //    route_tcp = new Route(null,routePort,Route.mode_client,true);
+        //} catch (Exception e1) {
+        //    //e1.printStackTrace();
+        //    throw e1;
+        //}
+        //try {
+        //    route_udp = new Route(null,routePort,Route.mode_client,false);
+        //} catch (Exception e1) {
+        //    //e1.printStackTrace();
+        //    throw e1;
+        //}
+        //netStatus=new NetStatus();
 		
-		portMapManager=new PortMapManager(this);
+        //portMapManager=new PortMapManager(this);
 
-		clientUISpeedUpdateThread=new Thread(){
-			public void run(){
-				while(true){
-					try {
-						Thread.sleep(500);
-					} catch (InterruptedException e1) {
-						e1.printStackTrace();
-					}
-					updateUISpeed();
-				}
-			}
-		};
-		clientUISpeedUpdateThread.start();
+        //clientUISpeedUpdateThread=new Thread(){
+        //    public void run(){
+        //        while(true){
+        //            try {
+        //                Thread.sleep(500);
+        //            } catch (InterruptedException e1) {
+        //                e1.printStackTrace();
+        //            }
+        //            updateUISpeed();
+        //        }
+        //    }
+        //};
+        //clientUISpeedUpdateThread.start();
 		
-		Route.addTrafficlistener(this);
+        //Route.addTrafficlistener(this);
 		
 	}
 	

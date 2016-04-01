@@ -47,7 +47,7 @@ namespace FinalSpeed.rudp
 
         long received;
 
-        Receiver(ConnectionUDP conn)
+        public Receiver(ConnectionUDP conn)
         {
             this.conn = conn;
             uis = new UDPInputStream(conn);
