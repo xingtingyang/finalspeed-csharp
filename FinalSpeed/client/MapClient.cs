@@ -6,151 +6,161 @@ using FinalSpeed.rudp;
 using System.Net;
 using FinalSpeed.utils;
 using System.Threading;
+using System.Runtime.CompilerServices;
 
 namespace FinalSpeed.client
 {
-    class MapClient:Trafficlistener
+    class MapClient : Trafficlistener
     {
-        	ConnectionProcessor imTunnelProcessor;
+        ConnectionProcessor imTunnelProcessor;
 
-	public Route route_udp,route_tcp;
+        public Route route_udp, route_tcp;
 
-	public short routePort=45;
+        public short routePort = 45;
 
-	public ClientUII ui;
+        public ClientUII ui;
 
-	public string serverAddress="";
+        public string serverAddress = "";
 
-	public IPAddress address=null;
+        public IPAddress address = null;
 
-	public int serverPort=130;
+        public int serverPort = 130;
 
-	NetStatus netStatus;
+        NetStatus netStatus;
 
-	long lastTrafficTime;
+        long lastTrafficTime;
 
-	int downloadSum=0;
+        int downloadSum = 0;
 
-	int uploadSum=0;
+        int uploadSum = 0;
 
-	Thread clientUISpeedUpdateThread;
+        Thread clientUISpeedUpdateThread;
 
-	int connNum=0;
-	
-	HashSet<ClientProcessorInterface> processTable=new HashSet<ClientProcessorInterface>();
-	
-	Object syn_process=new Object();
-	
-	static MapClient mapClient;
-	
-	PortMapManager portMapManager;
-		
-	public String mapdstAddress;
-	 
-	public int mapdstPort;
-	
-	static int monPort=25874;
-	
-	string systemName=System.getProperty("os.name").toLowerCase();
-	
-	bool useTcp=true;
-	
-	long clientId;
+        int connNum = 0;
 
-	Random ran=new Random();
+        HashSet<ClientProcessorInterface> processTable = new HashSet<ClientProcessorInterface>();
 
-	public MapClient(ClientUI ui){
-        //this.ui=ui;
-        //mapClient=this;
-        //try {
-        //     ServerSocket socket=new ServerSocket(monPort);
-        //    new Thread(){
-        //        public void run(){
-        //            try {
-        //                socket.accept();
-        //            } catch (IOException e) {
-        //                e.printStackTrace();
-        //                System.exit(0);
-        //            }
-        //        }
-        //    }.start();
-        //} catch (Exception e) {
-        //    //e.printStackTrace();
-        //    //System.exit(0);
-        //}
-        //try {
-        //    route_tcp = new Route(null,routePort,Route.mode_client,true);
-        //} catch (Exception e1) {
-        //    //e1.printStackTrace();
-        //    throw e1;
-        //}
-        //try {
-        //    route_udp = new Route(null,routePort,Route.mode_client,false);
-        //} catch (Exception e1) {
-        //    //e1.printStackTrace();
-        //    throw e1;
-        //}
-        //netStatus=new NetStatus();
-		
-        //portMapManager=new PortMapManager(this);
+        Object syn_process = new Object();
 
-        //clientUISpeedUpdateThread=new Thread(){
-        //    public void run(){
-        //        while(true){
-        //            try {
-        //                Thread.sleep(500);
-        //            } catch (InterruptedException e1) {
-        //                e1.printStackTrace();
-        //            }
-        //            updateUISpeed();
-        //        }
-        //    }
-        //};
-        //clientUISpeedUpdateThread.start();
-		
-        //Route.addTrafficlistener(this);
-		
-	}
-	
-	public static MapClient get(){
-		return mapClient;
-	}
+        static MapClient mapClient;
 
-	private void updateUISpeed(){
-		if(ui!=null){
-			ui.updateUISpeed(connNum,netStatus.getDownSpeed(),netStatus.getUpSpeed());
-		}
-	}
-	
-	public void setMapServer(String serverAddress,int serverPort,int remotePort,String passwordMd5,String password_proxy_Md5,boolean direct_cn,boolean tcp,
-			String password){
-		if(this.serverAddress==null
-				||!this.serverAddress.equals(serverAddress)
-				||this.serverPort!=serverPort){
-			
-			if(route_tcp.lastClientControl!=null){
-				route_tcp.lastClientControl.close();
-			} 
-			
-			if(route_udp.lastClientControl!=null){
-				route_udp.lastClientControl.close();
-			} 
+        PortMapManager portMapManager;
 
-			cleanRule();
-			if(serverAddress!=null&&!serverAddress.equals("")){
-				setFireWallRule(serverAddress,serverPort);
-			}
-			
-		}
-		this.serverAddress=serverAddress;
-		this.serverPort=serverPort;
-		address=null;
-		useTcp=tcp;
-		resetConnection();
-	}
-	
+        public String mapdstAddress;
 
-	void setFireWallRule(String serverAddress,int serverPort){
+        public int mapdstPort;
+
+        static int monPort = 25874;
+
+        string systemName = System.getProperty("os.name").toLowerCase();
+
+        bool useTcp = true;
+
+        long clientId;
+
+        Random ran = new Random();
+
+        public MapClient(ClientUI ui)
+        {
+            //this.ui=ui;
+            //mapClient=this;
+            //try {
+            //     ServerSocket socket=new ServerSocket(monPort);
+            //    new Thread(){
+            //        public void run(){
+            //            try {
+            //                socket.accept();
+            //            } catch (IOException e) {
+            //                e.printStackTrace();
+            //                System.exit(0);
+            //            }
+            //        }
+            //    }.start();
+            //} catch (Exception e) {
+            //    //e.printStackTrace();
+            //    //System.exit(0);
+            //}
+            //try {
+            //    route_tcp = new Route(null,routePort,Route.mode_client,true);
+            //} catch (Exception e1) {
+            //    //e1.printStackTrace();
+            //    throw e1;
+            //}
+            //try {
+            //    route_udp = new Route(null,routePort,Route.mode_client,false);
+            //} catch (Exception e1) {
+            //    //e1.printStackTrace();
+            //    throw e1;
+            //}
+            //netStatus=new NetStatus();
+
+            //portMapManager=new PortMapManager(this);
+
+            //clientUISpeedUpdateThread=new Thread(){
+            //    public void run(){
+            //        while(true){
+            //            try {
+            //                Thread.sleep(500);
+            //            } catch (InterruptedException e1) {
+            //                e1.printStackTrace();
+            //            }
+            //            updateUISpeed();
+            //        }
+            //    }
+            //};
+            //clientUISpeedUpdateThread.start();
+
+            //Route.addTrafficlistener(this);
+
+        }
+
+        public static MapClient get()
+        {
+            return mapClient;
+        }
+
+        private void updateUISpeed()
+        {
+            if (ui != null)
+            {
+                ui.updateUISpeed(connNum, netStatus.getDownSpeed(), netStatus.getUpSpeed());
+            }
+        }
+
+        public void setMapServer(String serverAddress, int serverPort, int remotePort, String passwordMd5, String password_proxy_Md5, bool direct_cn, bool tcp,
+                String password)
+        {
+            if (this.serverAddress == null
+                    || !this.serverAddress.Equals(serverAddress)
+                    || this.serverPort != serverPort)
+            {
+
+                if (route_tcp.lastClientControl != null)
+                {
+                    route_tcp.lastClientControl.close();
+                }
+
+                if (route_udp.lastClientControl != null)
+                {
+                    route_udp.lastClientControl.close();
+                }
+
+                cleanRule();
+                if (serverAddress != null && !serverAddress.equals(""))
+                {
+                    setFireWallRule(serverAddress, serverPort);
+                }
+
+            }
+            this.serverAddress = serverAddress;
+            this.serverPort = serverPort;
+            address = null;
+            useTcp = tcp;
+            resetConnection();
+        }
+
+
+        void setFireWallRule(String serverAddress, int serverPort){
 		String ip;
 		try {
 			ip = InetAddress.getByName(serverAddress).getHostAddress();
@@ -209,27 +219,34 @@ namespace FinalSpeed.client
 		}
 		
 	}
-	
-	void saveFile(byte[] data,String path) throws Exception{
-		FileOutputStream fos=null;
-		try {
-			fos=new FileOutputStream(path);
-			fos.write(data);
-		} catch (Exception e) {
-			throw e;
-		} finally {
-			if(fos!=null){
-				fos.close();
-			}
-		}
-	}
-	
-	void cleanRule(){
-		if(systemName.contains("mac os")){
-			cleanTcpTunRule_osx();
-		}else if(systemName.contains("linux")){
-			cleanTcpTunRule_linux();
-		}else {
+
+        void saveFile(byte[] data, String path)
+        {
+            FileOutputStream fos = null;
+            try
+            {
+                fos = new FileOutputStream(path);
+                fos.write(data);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            finally
+            {
+                if (fos != null)
+                {
+                    fos.close();
+                }
+            }
+        }
+
+        void cleanRule(){
+        //if(systemName.contains("mac os")){
+        //    cleanTcpTunRule_osx();
+        //}else if(systemName.contains("linux")){
+        //    cleanTcpTunRule_linux();
+        //}else {
 			try {
 				if(systemName.contains("xp")||systemName.contains("2003")){
 					String cmd_delete="ipseccmd -p \"tcptun_fs\" -w reg -y";
@@ -244,219 +261,236 @@ namespace FinalSpeed.client
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
-	}
-	
-	void cleanTcpTunRule_osx(){
-		String cmd2="sudo ipfw delete 5050";
-		runCommand(cmd2);
-	}
-	
-	
-	void cleanTcpTunRule_linux(){
-		while(true){
-			int row=getRow_linux();
-			if(row>0){
-				//MLog.println("删除行 "+row);
-				String cmd="iptables -D OUTPUT "+row;
-				runCommand(cmd);
-			}else {
-				break;
-			}
-		}
+        //}
 	}
 
-	int getRow_linux(){
-		int row_delect=-1;
-		String cme_list_rule="iptables -L -n --line-number";
-		//String [] cmd={"netsh","advfirewall set allprofiles state on"};
-		Thread errorReadThread=null;
-		try {
-			final Process p = Runtime.getRuntime().exec(cme_list_rule,null);
-
-			errorReadThread=new Thread(){
-				public void run(){
-					InputStream is=p.getErrorStream();
-					BufferedReader localBufferedReader = new BufferedReader(new InputStreamReader(is));
-					while (true){
-						String line; 
-						try {
-							line = localBufferedReader.readLine();
-							if (line == null){ 
-								break;
-							}else{ 
-								//System.out.println("erroraaa "+line);
-							}
-						} catch (IOException e) {
-							e.printStackTrace();
-							//error();
-							break;
-						}
-					}
-				}
-			};
-			errorReadThread.start();
+        void cleanTcpTunRule_osx()
+        {
+            String cmd2 = "sudo ipfw delete 5050";
+            runCommand(cmd2);
+        }
 
 
+        //void cleanTcpTunRule_linux(){
+        //    while(true){
+        //        int row=getRow_linux();
+        //        if(row>0){
+        //            //MLog.println("删除行 "+row);
+        //            String cmd="iptables -D OUTPUT "+row;
+        //            runCommand(cmd);
+        //        }else {
+        //            break;
+        //        }
+        //    }
+        //}
 
-			InputStream is=p.getInputStream();
-			BufferedReader localBufferedReader = new BufferedReader(new InputStreamReader(is));
-			while (true){
-				String line; 
-				try {
-					line = localBufferedReader.readLine();
-				//	System.out.println("standaaa "+line);
-					if (line == null){ 
-						break;
-					}else{ 
-						if(line.contains("tcptun_fs")){
-							int index=line.indexOf("   ");
-							if(index>0){
-								String n=line.substring(0, index);
-								try {
-									if(row_delect<0){
-										//System.out.println("standaaabbb "+line);
-										row_delect=Integer.parseInt(n);
-									}
-								} catch (Exception e) {
+        //int getRow_linux()
+        //{
+        //int row_delect=-1;
+        //String cme_list_rule="iptables -L -n --line-number";
+        ////String [] cmd={"netsh","advfirewall set allprofiles state on"};
+        //Thread errorReadThread=null;
+        //try {
+        //    final Process p = Runtime.getRuntime().exec(cme_list_rule,null);
 
-								}
-							}
-						};
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-					break;
-				}
-			}
+        //    errorReadThread=new Thread(){
+        //        public void run(){
+        //            InputStream is=p.getErrorStream();
+        //            BufferedReader localBufferedReader = new BufferedReader(new InputStreamReader(is));
+        //            while (true){
+        //                String line; 
+        //                try {
+        //                    line = localBufferedReader.readLine();
+        //                    if (line == null){ 
+        //                        break;
+        //                    }else{ 
+        //                        //System.out.println("erroraaa "+line);
+        //                    }
+        //                } catch (IOException e) {
+        //                    e.printStackTrace();
+        //                    //error();
+        //                    break;
+        //                }
+        //            }
+        //        }
+        //    };
+        //    errorReadThread.start();
 
 
-			errorReadThread.join();
-			p.waitFor();
-		} catch (Exception e) {
-			e.printStackTrace();
-			//error();
-		}
-		return row_delect;
-	}
-	
-	void resetConnection(){
-		synchronized (syn_process) {
-			
-		}
-	}
-	
-	public void onProcessClose(ClientProcessorInterface process){
-		synchronized (syn_process) {
-			processTable.remove(process);
-		}
-	}
 
-	synchronized public void closeAndTryConnect_Login(boolean testSpeed){
-		close();
-		boolean loginOK=ui.login();
-		if(loginOK){
-			ui.updateNode(testSpeed);
-			//testPool();
-		}
-	}
+        //    InputStream is=p.getInputStream();
+        //    BufferedReader localBufferedReader = new BufferedReader(new InputStreamReader(is));
+        //    while (true){
+        //        String line; 
+        //        try {
+        //            line = localBufferedReader.readLine();
+        //        //	System.out.println("standaaa "+line);
+        //            if (line == null){ 
+        //                break;
+        //            }else{ 
+        //                if(line.contains("tcptun_fs")){
+        //                    int index=line.indexOf("   ");
+        //                    if(index>0){
+        //                        String n=line.substring(0, index);
+        //                        try {
+        //                            if(row_delect<0){
+        //                                //System.out.println("standaaabbb "+line);
+        //                                row_delect=Integer.parseInt(n);
+        //                            }
+        //                        } catch (Exception e) {
 
-	synchronized public void closeAndTryConnect(){
-		close();
-		//testPool();
-	}
+        //                        }
+        //                    }
+        //                };
+        //            }
+        //        } catch (IOException e) {
+        //            e.printStackTrace();
+        //            break;
+        //        }
+        //    }
 
-	public void close(){
-		//closeAllProxyRequest();
-		//poolManage.close();
-		//CSocketPool.closeAll();
-	}
-	
-	public void trafficDownload(TrafficEvent event) {
-		////#MLog.println("下载 "+event.getTraffic());
-		netStatus.addDownload(event.getTraffic());
-		lastTrafficTime=System.currentTimeMillis();
-		downloadSum+=event.getTraffic();
-	}
 
-	public void trafficUpload(TrafficEvent event) {
+        //    errorReadThread.join();
+        //    p.waitFor();
+        //} catch (Exception e) {
+        //    e.printStackTrace();
+        //    //error();
+        //}
+        //return row_delect;
+        //}
+
+        void resetConnection()
+        {
+            lock (syn_process)
+            {
+
+            }
+        }
+
+        public void onProcessClose(ClientProcessorInterface process)
+        {
+            lock (syn_process)
+            {
+                processTable.Remove(process);
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public void closeAndTryConnect_Login(bool testSpeed)
+        {
+            close();
+            bool loginOK = ui.login();
+            if (loginOK)
+            {
+                ui.updateNode(testSpeed);
+                //testPool();
+            }
+        }
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public void closeAndTryConnect()
+        {
+            close();
+            //testPool();
+        }
+
+        public void close()
+        {
+            //closeAllProxyRequest();
+            //poolManage.close();
+            //CSocketPool.closeAll();
+        }
+
+        public void trafficDownload(TrafficEvent tevent)
+        {
+            ////#MLog.println("下载 "+event.getTraffic());
+            netStatus.addDownload(tevent.getTraffic());
+            lastTrafficTime = DateTime.Now.Millisecond;
+            downloadSum += tevent.getTraffic();
+        }
+
+        public void trafficUpload(TrafficEvent tevent) {
 		////#MLog.println("上传 "+event.getTraffic());
-		netStatus.addUpload(event.getTraffic());
-		lastTrafficTime=System.currentTimeMillis();
-		uploadSum+=event.getTraffic();
+		netStatus.addUpload(tevent.getTraffic());
+		lastTrafficTime=DateTime.Now.Millisecond
+		uploadSum+=tevent.getTraffic();
 	}
 
-	static void runCommand(String command){
-		Thread standReadThread=null;
-		Thread errorReadThread=null;
-		try {
-			final Process p = Runtime.getRuntime().exec(command,null);
-			standReadThread=new Thread(){
-				public void run(){
-					InputStream is=p.getInputStream();
-					BufferedReader localBufferedReader = new BufferedReader(new InputStreamReader(is));
-					while (true){
-						String line; 
-						try {
-							line = localBufferedReader.readLine();
-							//System.out.println("stand "+line);
-							if (line == null){ 
-								break;
-							}
-						} catch (IOException e) {
-							e.printStackTrace();
-							break;
-						}
-					}
-				}
-			};
-			standReadThread.start();
+        static void runCommand(string command)
+        {
+            //Thread standReadThread=null;
+            //Thread errorReadThread=null;
+            //try {
+            //    final Process p = Runtime.getRuntime().exec(command,null);
+            //    standReadThread=new Thread(){
+            //        public void run(){
+            //            InputStream is=p.getInputStream();
+            //            BufferedReader localBufferedReader = new BufferedReader(new InputStreamReader(is));
+            //            while (true){
+            //                String line; 
+            //                try {
+            //                    line = localBufferedReader.readLine();
+            //                    //System.out.println("stand "+line);
+            //                    if (line == null){ 
+            //                        break;
+            //                    }
+            //                } catch (IOException e) {
+            //                    e.printStackTrace();
+            //                    break;
+            //                }
+            //            }
+            //        }
+            //    };
+            //    standReadThread.start();
 
-			errorReadThread=new Thread(){
-				public void run(){
-					InputStream is=p.getErrorStream();
-					BufferedReader localBufferedReader = new BufferedReader(new InputStreamReader(is));
-					while (true){
-						String line; 
-						try {
-							line = localBufferedReader.readLine();
-							if (line == null){ 
-								break;
-							}else{ 
-								//System.out.println("error "+line);
-							}
-						} catch (IOException e) {
-							e.printStackTrace();
-							//error();
-							break;
-						}
-					}
-				}
-			};
-			errorReadThread.start();
-			standReadThread.join();
-			errorReadThread.join();
-			p.waitFor();
-		} catch (Exception e) {
-			e.printStackTrace();
-			//error();
-		}
-	}
+            //    errorReadThread=new Thread(){
+            //        public void run(){
+            //            InputStream is=p.getErrorStream();
+            //            BufferedReader localBufferedReader = new BufferedReader(new InputStreamReader(is));
+            //            while (true){
+            //                String line; 
+            //                try {
+            //                    line = localBufferedReader.readLine();
+            //                    if (line == null){ 
+            //                        break;
+            //                    }else{ 
+            //                        //System.out.println("error "+line);
+            //                    }
+            //                } catch (IOException e) {
+            //                    e.printStackTrace();
+            //                    //error();
+            //                    break;
+            //                }
+            //            }
+            //        }
+            //    };
+            //    errorReadThread.start();
+            //    standReadThread.join();
+            //    errorReadThread.join();
+            //    p.waitFor();
+            //} catch (Exception e) {
+            //    e.printStackTrace();
+            //    //error();
+            //}
+        }
 
-	public boolean isUseTcp() {
-		return useTcp;
-	}
+        public bool isUseTcp()
+        {
+            return useTcp;
+        }
 
-	public void setUseTcp(boolean useTcp) {
-		this.useTcp = useTcp;
-	}
+        public void setUseTcp(bool useTcp)
+        {
+            this.useTcp = useTcp;
+        }
 
-	public ClientUII getUi() {
-		return ui;
-	}
+        public ClientUII getUi()
+        {
+            return ui;
+        }
 
-	public void setUi(ClientUII ui) {
-		this.ui = ui;
-	}
+        public void setUi(ClientUII ui)
+        {
+            this.ui = ui;
+        }
     }
 }
