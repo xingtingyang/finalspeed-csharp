@@ -129,7 +129,6 @@ namespace FinalSpeed.client
 
         void saveMapRule()
         {
-            ///用自己的JSON类来存储
             //JSONObject json=new JSONObject();
             //JSONArray json_map_list=new JSONArray();
             //json.put("map_list", json_map_list);
@@ -150,6 +149,7 @@ namespace FinalSpeed.client
             //    throw new Exception("保存失败!");
             //}
 
+            ///用自己的JSON类来存储
             MapList map_list_json = new MapList();
             MapPair mappair = new MapPair();
             foreach (MapRule r in mapList)
@@ -169,43 +169,80 @@ namespace FinalSpeed.client
                 throw new Exception("保存失败!");
             }
 
-
-
-
         }
 
-        void loadMapRule(){
-		String content;
-		JSONObject json=null;
-		try {
-			content = readFileUtf8(configFilePath);
-			json=JSONObject.parseObject(content);
-		} catch (Exception e) {
-			//e.printStackTrace();
-		}
-		if(json!=null&&json.containsKey("map_list")){
-			JSONArray json_map_list=json.getJSONArray("map_list");
-			for(int i=0;i<json_map_list.size();i++){
-				JSONObject json_rule=(JSONObject) json_map_list.get(i);
-				MapRule mapRule=new MapRule();
-				mapRule.name=json_rule.getString("name");
-				mapRule.listen_port=json_rule.getIntValue("listen_port");
-				mapRule.dst_port=json_rule.getIntValue("dst_port");
-				mapList.add(mapRule);
-				ServerSocket serverSocket;
-				try {
-					serverSocket = new ServerSocket(mapRule.getListen_port());
-					listen(serverSocket);
-					mapRule.serverSocket=serverSocket;
-				} catch (IOException e) {
-					mapRule.using=true;
-					e.printStackTrace();
-				}
-				mapRuleTable.Add(mapRule.listen_port, mapRule);
-			}
-		}
+        void loadMapRule()
+        {
+            //string content;
+            //JSONObject json=null;
+            //try {
+            //    content = readFileUtf8(configFilePath);
+            //    json=JSONObject.parseObject(content);
+            //} catch (Exception e) {
+            //    //e.printStackTrace();
+            //}
+            //if(json!=null&&json.containsKey("map_list")){
+            //    JSONArray json_map_list=json.getJSONArray("map_list");
+            //    for(int i=0;i<json_map_list.size();i++){
+            //        JSONObject json_rule=(JSONObject) json_map_list.get(i);
+            //        MapRule mapRule=new MapRule();
+            //        mapRule.name=json_rule.getString("name");
+            //        mapRule.listen_port=json_rule.getIntValue("listen_port");
+            //        mapRule.dst_port=json_rule.getIntValue("dst_port");
+            //        mapList.add(mapRule);
+            //        ServerSocket serverSocket;
+            //        try {
+            //            serverSocket = new ServerSocket(mapRule.getListen_port());
+            //            listen(serverSocket);
+            //            mapRule.serverSocket=serverSocket;
+            //        } catch (IOException e) {
+            //            mapRule.using=true;
+            //            e.printStackTrace();
+            //        }
+            //        mapRuleTable.Add(mapRule.listen_port, mapRule);
+            //    }
+            //}
 
-	}
+            ///用JSON类改写
+            string content;
+            MapList maplistObject = null;// 用来辅助转换json的临时类
+            try
+            {
+                content = readFileUtf8(configFilePath);
+                maplistObject = JSON.parse<MapList>(content);
+            }
+            catch (Exception e)
+            {
+                MLog.info(e.Message);
+            }
+
+            if (maplistObject != null && maplistObject.map_list != null)
+            {
+                foreach (var mapPair in maplistObject.map_list)//这里显得繁琐了，以后要是能改造MapRule就能简单好多
+                {
+                    MapRule mapRule = new MapRule();
+                    mapRule.dst_port = mapPair.dst_port;
+                    mapRule.listen_port = mapPair.listen_port;
+                    mapRule.name = mapPair.name;
+                    mapList.Add(mapRule);
+                    Socket serverSocket;
+                    try
+                    {
+                        serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                        serverSocket.Connect(IPAddress.Parse("127.0.0.1"), mapRule.getListen_port());
+                        listen(serverSocket);
+                        mapRule.serverSocket = serverSocket;
+                    }
+                    catch(Exception e)
+                    {
+                        mapRule.isUsing=true;
+                        MLog.info(e.Message);
+                    }
+                    mapRuleTable.Add(mapRule.listen_port, mapRule);
+                }
+            }
+
+        }
 
         MapRule getMapRule(string name)
         {

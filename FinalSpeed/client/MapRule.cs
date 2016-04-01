@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.Serialization;
 
 namespace FinalSpeed.client
 {
@@ -30,7 +31,7 @@ namespace FinalSpeed.client
         /// 可以直接用listen_port属性
         /// </summary>
         /// <returns></returns>
-        [Obsolete] 
+        [Obsolete]
         public int getListen_port()
         {
             return listen_port;
